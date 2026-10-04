@@ -2,7 +2,7 @@
 
 A Netflix-style movie and TV streaming website built on WordPress. A custom plugin runs the data and a custom theme draws the screens. Both were designed with AI tools as my second WordPress project.
 
-[**Live site**](https://movieflix.freehosting.dev/) | [**Project guide**](docs/index.html) | [**Downloads**](releases/)
+[**Live site**](https://movieflix.freehosting.dev/) | [**Project guide**](https://ajay995182.github.io/movieflix/) | [**Downloads**](releases/)
 
 ![Home page](screenshots/02-home-trending.jpg)
 
@@ -53,7 +53,7 @@ Or copy the two folders under `wp-content/` straight into your WordPress install
 
 ## Test checklist
 
-The project guide ([docs/index.html](docs/index.html)) has a 35-point checklist for login, My List, player, ratings, Live TV and admin. Run it once on a laptop and once on a phone.
+The project guide ([docs/index.html](https://ajay995182.github.io/movieflix/)) has a 35-point checklist for login, My List, player, ratings, Live TV and admin. Run it once on a laptop and once on a phone.
 
 ## Demo data
 
