@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MovieFlix — Complete Documentation &amp; Full Setup</title>
+<style>
+:root {
+  --bg: #0a0c0f;
+  --bg2: #12151a;
+  --bg3: #1a1f27;
+  --line: rgba(255,255,255,.09);
+  --text: #eef0f4;
+  --muted: #9aa3b2;
+  --primary: #e50f5a;
+  --accent: #7c3aed;
+  --ok: #34d399;
+  --warn: #fbbf24;
+  --radius: 12px;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --mono: ui-monospace, Menlo, Consolas, monospace;
+  --pad: 16px;
+  --bottom-h: 58px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 64px;
+  scroll-padding-bottom: calc(var(--bottom-h) + var(--safe-b) + 16px);
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  font-size: 15px;
+  overflow-x: hidden;
+  max-width: 100vw;
+  padding-bottom: calc(var(--bottom-h) + var(--safe-b) + 20px);
+}
+a { color: #60a5fa; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.top {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(10,12,15,.96);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.top-inner {
+  max-width: 920px; margin: 0 auto;
+  padding: 12px var(--pad);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.logo { font-weight: 800; font-size: 1.1rem; color: #fff; }
+.logo span { color: var(--primary); }
+.top-tag {
+  font-size: .65rem; font-weight: 700; color: var(--muted);
+  background: var(--bg3); border: 1px solid var(--line);
+  padding: 4px 9px; border-radius: 999px; white-space: nowrap;
+}
+
+.hero {
+  background:
+    radial-gradient(ellipse 100% 70% at 0% -30%, rgba(229,15,90,.2), transparent 50%),
+    radial-gradient(ellipse 80% 50% at 100% 0%, rgba(124,58,237,.15), transparent 45%),
+    var(--bg);
+  border-bottom: 1px solid var(--line);
+  padding: 24px var(--pad) 20px;
+}
+.hero-inner { max-width: 920px; margin: 0 auto; }
+.hero h1 {
+  font-size: clamp(1.3rem, 5vw, 1.85rem);
+  font-weight: 800; letter-spacing: -.03em; line-height: 1.2;
+  margin-bottom: 8px;
+}
+.hero p { color: var(--muted); font-size: .9rem; max-width: 54ch; margin-bottom: 12px; }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge {
+  font-size: .68rem; font-weight: 600; color: var(--muted);
+  background: var(--bg3); border: 1px solid var(--line);
+  padding: 4px 9px; border-radius: 999px;
+}
+.badge strong { color: var(--text); }
+.hero-links { margin: 14px 0 0; }
+.btn-gh { display: inline-block; background: var(--primary); color: #fff; font-weight: 700; font-size: .85rem; padding: 10px 16px; border-radius: 8px; }
+.btn-gh:hover { text-decoration: none; filter: brightness(1.1); }
+
+.wrap { max-width: 920px; margin: 0 auto; padding: 20px var(--pad) 28px; width: 100%; }
+section { margin-bottom: 36px; scroll-margin-top: 70px; }
+h2 {
+  font-size: clamp(1.08rem, 3.6vw, 1.32rem);
+  font-weight: 800; letter-spacing: -.02em;
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+h2 .num {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: rgba(229,15,90,.18); color: var(--primary);
+  font-size: .75rem; display: inline-grid; place-items: center; flex-shrink: 0;
+}
+h3 { font-size: .95rem; font-weight: 700; color: #fff; margin: 18px 0 8px; }
+h4 { font-size: .88rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+p { color: var(--muted); margin-bottom: 8px; }
+p strong, li strong { color: var(--text); }
+ul, ol { color: var(--muted); padding-left: 1.15rem; margin-bottom: 10px; }
+li { margin-bottom: 5px; }
+code {
+  font-family: var(--mono); font-size: .8em;
+  background: rgba(255,255,255,.06); padding: 1px 5px; border-radius: 4px;
+  color: #e9d5ff; word-break: break-word;
+}
+
+.grid {
+  display: grid; grid-template-columns: 1fr; gap: 10px; margin: 12px 0;
+}
+@media (min-width: 560px) {
+  .grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (min-width: 840px) {
+  .grid.cols-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+}
+.card {
+  background: var(--bg2); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 12px 13px; min-width: 0;
+}
+.card p { font-size: .82rem; margin: 0; }
+.card .tag {
+  font-size: .62rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .04em; color: var(--primary); margin-bottom: 4px; display: block;
+}
+
+.note {
+  border-left: 3px solid var(--primary);
+  background: rgba(229,15,90,.08);
+  padding: 10px 12px; border-radius: 0 8px 8px 0;
+  margin: 10px 0; font-size: .84rem; color: var(--muted);
+}
+.note strong { color: #fda4af; }
+.note-ok { border-left-color: var(--ok); background: rgba(52,211,153,.08); }
+.note-ok strong { color: #6ee7b7; }
+.note-warn { border-left-color: var(--warn); background: rgba(251,191,36,.1); }
+.note-warn strong { color: #fcd34d; }
+
+.box {
+  background: var(--bg2); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 12px 13px; margin: 8px 0;
+}
+.box h4 {
+  font-size: .88rem; font-weight: 700; color: #fff;
+  display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+}
+.box .n {
+  width: 22px; height: 22px; border-radius: 6px; flex-shrink: 0;
+  background: rgba(124,58,237,.25); color: #c4b5fd;
+  font-size: .72rem; font-weight: 800;
+  display: inline-grid; place-items: center;
+}
+.box p, .box li { font-size: .84rem; }
+.box ol, .box ul { margin-bottom: 0; }
+
+.tree, .arch {
+  background: var(--bg2); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 10px 12px;
+  margin: 10px 0; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+.tree pre, .arch pre {
+  font-family: var(--mono); font-size: .67rem; line-height: 1.45;
+  white-space: pre; margin: 0; min-width: min-content;
+}
+.arch pre { color: #c4b5fd; }
+.tree pre { color: #a5b4fc; }
+.tree .c { color: #6b7280; }
+.tree .d { color: #f9a8d4; }
+.tree .f { color: #86efac; }
+
+.table-wrap {
+  margin: 10px 0; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--line); border-radius: var(--radius); max-width: 100%;
+}
+table { width: 100%; border-collapse: collapse; font-size: .78rem; min-width: 440px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+th {
+  color: var(--muted); font-size: .65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .03em; background: var(--bg2);
+}
+td { color: var(--muted); }
+td strong { color: var(--text); }
+
+.ok-list li::marker { color: var(--ok); }
+
+.steps { counter-reset: step; margin: 12px 0; }
+.step {
+  display: grid; grid-template-columns: 30px 1fr; gap: 10px;
+  margin-bottom: 12px; align-items: start;
+}
+.step::before {
+  counter-increment: step;
+  content: counter(step);
+  width: 30px; height: 30px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff; font-weight: 800; font-size: .78rem;
+  display: grid; place-items: center;
+}
+.step p { margin: 0; font-size: .84rem; }
+
+/* Mobile bottom bar for docs */
+.bottom-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+  background: rgba(12,14,18,.97);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--line);
+  padding-bottom: var(--safe-b);
+}
+.bottom-inner {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  max-width: 920px; margin: 0 auto; height: var(--bottom-h);
+}
+.bottom-inner a {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px; color: var(--muted); text-decoration: none;
+  font-size: .6rem; font-weight: 600; min-width: 0; padding: 6px 2px;
+  -webkit-tap-highlight-color: transparent;
+}
+.bottom-inner a:hover, .bottom-inner a:focus { color: #fff; text-decoration: none; }
+.bottom-inner a .ico { font-size: .95rem; line-height: 1; }
+.bottom-inner a .label {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  :root { --pad: 24px; }
+  body { font-size: 16px; padding-bottom: 48px; }
+  .bottom-bar { display: none; }
+  .hero { padding: 36px var(--pad) 28px; }
+  .wrap { padding: 28px var(--pad) 56px; }
+  section { margin-bottom: 44px; }
+  .tree pre, .arch pre { font-size: .74rem; }
+  table { font-size: .85rem; min-width: 0; }
+}
+
+footer.doc-foot {
+  border-top: 1px solid var(--line);
+  padding: 16px var(--pad) 20px;
+  text-align: center; color: var(--muted); font-size: .75rem;
+}
+footer.doc-foot strong { color: var(--text); }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="logo">Movie<span>Flix</span> Docs</div>
+    <span class="top-tag">Complete Guide</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <h1>MovieFlix — Complete Documentation</h1>
+    <p>
+      Full guide: what the site is, all features, how the plugin and theme are built,
+      every important file, full setup steps, login/workflow testing, and go-live.
+      The plugin and the theme are custom designed by me (Ajay) with AI tools.
+    </p>
+    <p class="hero-links"><a class="btn-gh" href="https://github.com/ajay995182/movieflix" target="_blank" rel="noopener">View on GitHub</a></p>
+    <div class="badges">
+      <span class="badge"><strong>Plugin</strong> Core 1.5.0</span>
+      <span class="badge"><strong>Theme</strong> 2.0.4</span>
+      <span class="badge"><strong>WP</strong> 6.0+</span>
+      <span class="badge"><strong>PHP</strong> 7.4+</span>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+<!-- ========== 1 OVERVIEW ========== -->
+<section id="overview">
+  <h2><span class="num">1</span> Overview — what is MovieFlix?</h2>
+  <p>
+    MovieFlix is a <strong>Netflix-style movie &amp; TV streaming website</strong> built on WordPress.
+    It is made of <strong>two parts</strong>. Both must be installed and active:
+  </p>
+  <div class="grid">
+    <div class="card">
+      <span class="tag">Plugin</span>
+      <h4>MovieFlix Core</h4>
+      <p>The <strong>engine</strong>. Stores movies, series, users, My List, watch progress, ratings, Live TV data, admin tools, Google login, notifications, analytics. Creates database tables and front-end pages on activation.</p>
+    </div>
+    <div class="card">
+      <span class="tag">Theme</span>
+      <h4>MovieFlix Theme</h4>
+      <p>The <strong>look and pages</strong>. Home, browse grids, detail pages, video player UI, Live TV screen, login/register, mobile bottom menu, search, notifications panel, PWA.</p>
+    </div>
+  </div>
+  <div class="note note-ok">
+    <strong>Built by me, with AI tools:</strong> both the MovieFlix Core plugin and the MovieFlix theme are custom code that I designed with AI tools. They are not third-party plugins or a downloaded theme. The only outside script is <strong>hls.js</strong> (loaded from jsDelivr) for HLS video.
+  </div>
+  <div class="note">
+    <strong>Important:</strong> If the plugin is not active, the theme only shows a message to activate MovieFlix Core. The streaming UI will not load without the plugin.
+  </div>
+</section>
+
+<!-- ========== 2 DEMO DATA ========== -->
+<section id="demo">
+  <h2><span class="num">2</span> Demo data (for testing only)</h2>
+  <div class="note-warn note">
+    <strong>Please read:</strong> The demo content exists <strong>only to test the website</strong>. This is not a real streaming service and it does not stream the films named in the demo. No copyrighted video is included.
+  </div>
+  <p>What the demo import adds:</p>
+  <ul>
+    <li><strong>38 movies, 8 series and 30 cast / director entries.</strong> Many use real Indian film titles and real people's names (Telugu, Hindi, Tamil, Kannada) so the layout looks like a real catalog.</li>
+    <li><strong>Poster and backdrop images</strong> loaded from <strong>TMDB</strong> (image.tmdb.org) for those titles. The plugin also ships 13 simple placeholder posters (SVG) used as fallbacks.</li>
+    <li><strong>Sample videos</strong> that are the same few open test files on every title: Blender open movies such as Big Buck Bunny and Elephants Dream from a public sample bucket, and a public Mux HLS test stream. They are <strong>not</strong> the actual films.</li>
+    <li><strong>12 Live TV channels</strong> and a sample subtitle file</li>
+  </ul>
+  <p>
+    After testing, use <strong>Remove demo</strong> in admin, then add your own licensed titles, artwork and real video or stream URLs before going live.
+  </p>
+  <div class="note">
+    <strong>Credit:</strong> This product uses the TMDB API but is not endorsed or certified by TMDB.
+  </div>
+</section>
+
+<!-- ========== 3 ALL FEATURES ========== -->
+<section id="features">
+  <h2><span class="num">3</span> All features explained clearly</h2>
+
+  <h3>A. Content the site can show</h3>
+  <ul class="ok-list">
+    <li><strong>Movies</strong> — full detail page with poster, backdrop, description, cast, genres, rating, play button</li>
+    <li><strong>TV series</strong> — seasons and episode lists</li>
+    <li><strong>Episodes</strong> — each episode can have its own video and “next episode” flow</li>
+    <li><strong>People</strong> — actors / directors with filmography</li>
+    <li><strong>Live TV channels</strong> — name, category, stream URL, favourite</li>
+    <li><strong>Taxonomies / filters</strong> — Genre, Language, Country, Age rating, Quality (HD/4K), Year</li>
+  </ul>
+
+  <h3>B. Finding content (discovery)</h3>
+  <ul class="ok-list">
+    <li>Home page with <strong>hero banner</strong> and content rows (Trending, Popular, New, recommendations)</li>
+    <li><strong>Movies</strong> and <strong>TV Shows</strong> browse pages with grids</li>
+    <li><strong>Search</strong> with live suggestions showing poster, year, and type badges</li>
+    <li>Genre pages and language chips</li>
+    <li><strong>New &amp; Popular</strong> page</li>
+    <li>Similar titles on detail pages</li>
+  </ul>
+
+  <h3>C. Watching (player)</h3>
+  <ul class="ok-list">
+    <li>Full <strong>Watch page</strong> for movies and episodes</li>
+    <li>Supports <strong>MP4</strong> and <strong>HLS</strong> (<code>.m3u8</code>) streams</li>
+    <li><strong>Subtitles</strong> selector when tracks are set in admin</li>
+    <li><strong>Audio tracks</strong> selector when set</li>
+    <li><strong>Skip intro</strong> button (intro start/end times from admin)</li>
+    <li><strong>Next episode</strong> overlay for series binge watching</li>
+    <li>Progress is saved automatically → powers <strong>Continue Watching</strong></li>
+  </ul>
+
+  <h3>D. User account</h3>
+  <ul class="ok-list">
+    <li>Register, Login, Logout</li>
+    <li><strong>Continue with Google</strong> button on both Login and Sign-up pages (needs Google API keys to complete real Google login)</li>
+    <li>Forgot password / reset password</li>
+    <li><strong>My List</strong> — add/remove titles via AJAX without page reload</li>
+    <li><strong>Continue Watching</strong> row and page</li>
+    <li>Star <strong>ratings</strong> and text <strong>reviews</strong></li>
+    <li><strong>Multiple profiles</strong> including a Kids profile</li>
+    <li><strong>Kids mode</strong> — filters adult content and can lock some navigation</li>
+    <li>Optional <strong>parental PIN</strong></li>
+    <li>Optional <strong>members-only</strong> titles</li>
+  </ul>
+
+  <h3>E. Live TV</h3>
+  <ul class="ok-list">
+    <li>Channel grid with category chips</li>
+    <li>Favourite channels for logged-in users</li>
+    <li>Channel watch page with live player</li>
+  </ul>
+
+  <h3>F. Mobile website</h3>
+  <ul class="ok-list">
+    <li>Bottom navigation: Home · Movies · TV · Live · Profile</li>
+    <li>Two posters per row on phones for Movies and Live (not three)</li>
+    <li>Sticky header, search overlay, notification panel that is not cut off</li>
+  </ul>
+
+  <h3>G. PWA &amp; notifications</h3>
+  <ul class="ok-list">
+    <li>Install app banner when the browser supports PWA</li>
+    <li>Service worker for a basic offline shell</li>
+    <li>In-app notification bell (read / mark all read)</li>
+    <li>Optional browser “Enable notifications” permission flow</li>
+  </ul>
+
+  <h3>H. Admin (WordPress dashboard)</h3>
+  <ul class="ok-list">
+    <li>MovieFlix Settings (colors, force login, PWA, ads, Google, channels, profiles…)</li>
+    <li>Edit screens for movie / series / episode / channel (video URL, posters, seasons, intro times…)</li>
+    <li>Chunked <strong>video upload</strong></li>
+    <li><strong>Import demo</strong> / remove demo</li>
+    <li>CSV / bulk tools for titles and episodes</li>
+    <li>Activity log (who watched, searched, logged in)</li>
+    <li><strong>Analytics</strong> page (views, plays, logins, top titles)</li>
+  </ul>
+
+  <div class="grid cols-3" style="margin-top:16px">
+    <div class="card">
+      <span class="tag">Browse</span>
+      <h4>Home &amp; grids</h4>
+      <p>Hero, rows, genres, search suggestions, Live chips.</p>
+    </div>
+    <div class="card">
+      <span class="tag">Watch</span>
+      <h4>Player</h4>
+      <p>MP4/HLS, subs, audio, skip intro, next episode.</p>
+    </div>
+    <div class="card">
+      <span class="tag">Account</span>
+      <h4>Users</h4>
+      <p>Login, Google, My List, profiles, kids mode.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 4 ARCHITECTURE ========== -->
+<section id="arch">
+  <h2><span class="num">4</span> How the plugin and theme were made</h2>
+  <p>
+    Design model: <strong>engine + skin</strong>.
+    The plugin never draws the Netflix UI by itself; the theme never stores My List or progress by itself.
+    They talk through PHP helpers, post meta, and AJAX.
+  </p>
+  <div class="arch">
+<pre>WordPress site
+│
+├── Plugin: MovieFlix Core          ← data + rules + APIs
+│     • Custom post types (movie, series, episode, person, channel)
+│     • Taxonomies (genre, language, country, rating, quality, year)
+│     • Custom DB tables (watchlist, history, ratings, views, activity)
+│     • AJAX endpoints (list, rate, progress, search, notify)
+│     • Admin screens (settings, import, analytics, upload)
+│
+└── Theme: MovieFlix                ← pages + CSS + player UI
+      • Templates (home, browse, watch, live, login, profile…)
+      • style.css (desktop layout + mobile bottom nav + 2-col grids)
+      • app.js / player.js / channel-player.js / sw.js
+      • Calls plugin helpers &amp; AJAX</pre>
+  </div>
+
+  <h3>Main design choices</h3>
+  <div class="grid">
+    <div class="card">
+      <h4>1. Custom post types</h4>
+      <p>Movies are not normal blog posts. Each title is a CPT with its own fields (video, poster, runtime, cast…).</p>
+    </div>
+    <div class="card">
+      <h4>2. Custom tables</h4>
+      <p>My List, watch progress, ratings, and activity use dedicated tables so queries stay fast and clear.</p>
+    </div>
+    <div class="card">
+      <h4>3. AJAX actions</h4>
+      <p>Adding to list, rating, saving progress, and search suggestions update the page without a full reload.</p>
+    </div>
+    <div class="card">
+      <h4>4. One class per job</h4>
+      <p>Example: <code>MF_Ajax</code> only handles AJAX; <code>MF_Content</code> only registers post types; <code>MF_Demo</code> only imports sample data.</p>
+    </div>
+  </div>
+
+  <h3>What happens when you activate the plugin</h3>
+  <ol>
+    <li>Creates database tables (watchlist, history, ratings, views, activity)</li>
+    <li>Registers movie / series / episode / person types and taxonomies</li>
+    <li>Creates pages: Login, Register, Profile, My List, Continue Watching, Search, Live TV, TV Shows, New &amp; Popular, Genres, Profiles, Lost / Reset Password. (The Watch page is a pretty URL, <code>/watch/title-slug/</code>, not a created page.)</li>
+    <li>Adds default genre terms</li>
+    <li>Saves a DB version number for future updates</li>
+  </ol>
+</section>
+
+<!-- ========== 5 PLUGIN FILES ========== -->
+<section id="plugin">
+  <h2><span class="num">5</span> Plugin files — full explanation</h2>
+  <p>Folder after unzip: <code>movieflix-core/</code></p>
+
+  <div class="tree">
+<pre><span class="d">movieflix-core/</span>
+├── <span class="f">movieflix-core.php</span>          <span class="c">Main bootstrap — loads everything</span>
+├── <span class="f">index.php</span>                   <span class="c">Security stub (blocks directory listing)</span>
+│
+├── <span class="d">includes/</span>                   <span class="c">Core business logic</span>
+│   ├── <span class="f">functions.php</span>           <span class="c">Helpers: mf_opt, mf_img, mf_watch_url, mf_meta</span>
+│   ├── <span class="f">class-mf-install.php</span>    <span class="c">Activation: DB tables + page creation</span>
+│   ├── <span class="f">class-mf-content.php</span>    <span class="c">Registers CPT + taxonomies</span>
+│   ├── <span class="f">class-mf-query.php</span>      <span class="c">Home rows, similar titles, AJAX search</span>
+│   ├── <span class="f">class-mf-demo.php</span>       <span class="c">Demo content importer / remover</span>
+│   ├── <span class="f">demo-data.php</span>           <span class="c">Demo titles list (testing only)</span>
+│   ├── <span class="f">class-mf-activity.php</span>   <span class="c">Logs views, plays, logins, searches</span>
+│   ├── <span class="f">class-mf-google.php</span>     <span class="c">Google OAuth “Continue with Google”</span>
+│   ├── <span class="f">class-mf-extras.php</span>     <span class="c">Profiles, kids mode, channels, membership, PIN</span>
+│   └── <span class="f">class-mf-notify.php</span>     <span class="c">In-app + browser notification hooks</span>
+│
+├── <span class="d">public/</span>                     <span class="c">Front-end request handlers</span>
+│   ├── <span class="f">class-mf-routes.php</span>     <span class="c">Pretty URLs /watch/{slug}/</span>
+│   ├── <span class="f">class-mf-ajax.php</span>       <span class="c">My List, rate, progress, events</span>
+│   └── <span class="f">class-mf-forms.php</span>      <span class="c">Login, register, reviews, profile forms</span>
+│
+├── <span class="d">admin/</span>                      <span class="c">WordPress admin only</span>
+│   ├── <span class="f">class-mf-admin.php</span>      <span class="c">Settings UI</span>
+│   ├── <span class="f">class-mf-metaboxes.php</span>  <span class="c">Edit fields for movie/series/episode</span>
+│   ├── <span class="f">class-mf-upload.php</span>     <span class="c">Chunked video uploader</span>
+│   ├── <span class="f">class-mf-import.php</span>     <span class="c">CSV / TMDB / bulk episodes</span>
+│   ├── <span class="f">class-mf-activity-admin.php</span> <span class="c">Activity log screen</span>
+│   └── <span class="f">class-mf-analytics-admin.php</span> <span class="c">Analytics dashboard</span>
+│
+└── <span class="d">assets/</span>
+    ├── <span class="d">css/</span><span class="f">admin.css</span>
+    └── <span class="d">js/</span><span class="f">admin.js</span>, <span class="f">activity.js</span></pre>
+  </div>
+
+  <h3>What each class does (plain words)</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>File / class</th><th>Responsibility</th></tr></thead>
+    <tbody>
+      <tr><td><strong>movieflix-core.php</strong></td><td>Defines constants, loads modules, boots the plugin</td></tr>
+      <tr><td><strong>functions.php</strong></td><td>Small helpers: get setting, poster URL, watch link, meta</td></tr>
+      <tr><td><strong>MF_Install</strong></td><td>On activate: creates tables and front-end pages</td></tr>
+      <tr><td><strong>MF_Content</strong></td><td>Tells WordPress we have movies, series, people, taxonomies</td></tr>
+      <tr><td><strong>MF_Query</strong></td><td>Builds home rows, recommendations, search suggestions</td></tr>
+      <tr><td><strong>MF_Demo + demo-data.php</strong></td><td>Fills site with sample titles for testing only</td></tr>
+      <tr><td><strong>MF_Ajax</strong></td><td>Toggle My List, save progress, rate, track play events</td></tr>
+      <tr><td><strong>MF_Forms</strong></td><td>Processes login, register, review, profile forms</td></tr>
+      <tr><td><strong>MF_Routes</strong></td><td>Pretty /watch/slug/ rewrite rules</td></tr>
+      <tr><td><strong>MF_Activity</strong></td><td>Writes activity rows used by Analytics</td></tr>
+      <tr><td><strong>MF_Google</strong></td><td>Continue with Google OAuth start + callback</td></tr>
+      <tr><td><strong>MF_Extras</strong></td><td>Live channels, multi-profiles, kids filter, PIN, membership</td></tr>
+      <tr><td><strong>MF_Notify</strong></td><td>Notification list for the bell icon</td></tr>
+      <tr><td><strong>MF_Metaboxes</strong></td><td>Admin fields: video, posters, seasons, intro, audio</td></tr>
+      <tr><td><strong>MF_Upload</strong></td><td>Upload large videos in chunks</td></tr>
+      <tr><td><strong>MF_Import</strong></td><td>CSV / bulk import tools</td></tr>
+      <tr><td><strong>MF_Analytics_Admin</strong></td><td>Admin Analytics page (views, plays, top titles)</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Database tables the plugin creates</h3>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Table</th><th>What it stores</th></tr></thead>
+    <tbody>
+      <tr><td><code>watch_history</code></td><td>Continue Watching (position, duration, completed)</td></tr>
+      <tr><td><code>watchlist</code></td><td>My List entries</td></tr>
+      <tr><td><code>ratings</code></td><td>User star ratings</td></tr>
+      <tr><td><code>views</code></td><td>View / play event counts</td></tr>
+      <tr><td><code>activity</code></td><td>Full activity log for Analytics</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ========== 6 THEME FILES ========== -->
+<section id="theme">
+  <h2><span class="num">6</span> Theme files — full explanation</h2>
+  <p>Folder after unzip: <code>movieflix/</code></p>
+
+  <div class="tree">
+<pre><span class="d">movieflix/</span>
+├── <span class="f">style.css</span>                 <span class="c">All UI (desktop + mobile grids + bottom nav)</span>
+├── <span class="f">functions.php</span>             <span class="c">Theme bootstrap, version, loads inc/</span>
+├── <span class="f">header.php</span>                <span class="c">Logo, nav, search, notifications, account</span>
+├── <span class="f">footer.php</span>                <span class="c">Footer links + mobile bottom nav</span>
+├── <span class="f">front-page.php</span>            <span class="c">Home (hero + rows)</span>
+├── <span class="f">index.php</span> · <span class="f">404.php</span>
+│
+├── <span class="f">single-movie.php</span>          <span class="c">Movie detail page</span>
+├── <span class="f">single-series.php</span>         <span class="c">Series detail + episodes</span>
+├── <span class="f">single-person.php</span>         <span class="c">Actor / director page</span>
+├── <span class="f">single-channel.php</span>        <span class="c">Live channel player page</span>
+├── <span class="f">archive-movie.php</span>         <span class="c">Movies browse grid</span>
+├── <span class="f">archive-series.php</span>        <span class="c">Series browse grid</span>
+├── <span class="f">taxonomy-genre.php</span>        <span class="c">Genre archive</span>
+│
+├── <span class="f">page-watch.php</span>            <span class="c">Full video player page</span>
+├── <span class="f">page-channels.php</span>         <span class="c">Live TV grid + category chips</span>
+├── <span class="f">page-tv-shows.php</span>
+├── <span class="f">page-new-popular.php</span>
+├── <span class="f">page-search.php</span>           <span class="c">Search results</span>
+├── <span class="f">page-my-list.php</span>
+├── <span class="f">page-continue-watching.php</span>
+├── <span class="f">page-profile.php</span>          <span class="c">Account tabs</span>
+├── <span class="f">page-profiles.php</span>         <span class="c">Switch profiles</span>
+├── <span class="f">page-login.php</span>            <span class="c">Sign in + Continue with Google</span>
+├── <span class="f">page-register.php</span>         <span class="c">Sign up + Google</span>
+├── <span class="f">page-lost-password.php</span> · <span class="f">page-reset-password.php</span>
+├── <span class="f">page-genres.php</span>
+│
+├── <span class="d">template-parts/</span>
+│   ├── <span class="f">browse.php</span>            <span class="c">Shared grid + filters</span>
+│   ├── <span class="f">hero.php</span>              <span class="c">Home hero slider</span>
+│   ├── <span class="f">single-title.php</span>      <span class="c">Shared detail layout + Up Next</span>
+│   ├── <span class="f">rating.php</span> · <span class="f">reviews.php</span>
+│
+├── <span class="d">inc/</span>
+│   ├── <span class="f">setup.php</span>             <span class="c">Menus, assets, PWA, image sizes</span>
+│   ├── <span class="f">template-tags.php</span>     <span class="c">movieflix_card, grid, Google button, nav</span>
+│   ├── <span class="f">seo.php</span>               <span class="c">Meta tags / SEO</span>
+│   └── <span class="f">needs-plugin.php</span>      <span class="c">Message if Core is inactive</span>
+│
+└── <span class="d">assets/js/</span>
+    ├── <span class="f">app.js</span>                <span class="c">Search, list, notifications, menus, PWA</span>
+    ├── <span class="f">player.js</span>             <span class="c">HLS player, subs, skip, next overlay</span>
+    ├── <span class="f">channel-player.js</span>     <span class="c">Live channel player</span>
+    └── <span class="f">sw.js</span>                 <span class="c">Service worker (PWA)</span></pre>
+  </div>
+
+  <p>
+    <strong>Theme job:</strong> draw the UI and call the plugin.<br>
+    <strong>Plugin job:</strong> store data and answer “save list / save progress / search”.
+  </p>
+</section>
+
+<!-- ========== 7 HOW IT WORKS ========== -->
+<section id="flow">
+  <h2><span class="num">7</span> How plugin + theme work together</h2>
+
+  <h3>Example: Add to My List</h3>
+  <div class="steps">
+    <div class="step"><div><h4>User taps +</h4><p>Theme <code>app.js</code> catches the click.</p></div></div>
+    <div class="step"><div><h4>AJAX request</h4><p>Sends toggle-list action + movie ID to the plugin.</p></div></div>
+    <div class="step"><div><h4>Plugin saves</h4><p><code>MF_Ajax</code> writes a row in the <code>watchlist</code> table.</p></div></div>
+    <div class="step"><div><h4>UI updates</h4><p>Button shows “In My List” without reloading the page.</p></div></div>
+  </div>
+
+  <h3>Example: Play a movie</h3>
+  <div class="steps">
+    <div class="step"><div><h4>Open Play</h4><p>Goes to <code>/watch/title-slug/</code> via routes.</p></div></div>
+    <div class="step"><div><h4>Watch page loads</h4><p><code>page-watch.php</code> reads video URL, subs, intro times from post meta.</p></div></div>
+    <div class="step"><div><h4>Player runs</h4><p><code>player.js</code> plays MP4 or HLS; skip intro / next episode when set.</p></div></div>
+    <div class="step"><div><h4>Progress saved</h4><p>Plugin stores time in <code>watch_history</code> for Continue Watching.</p></div></div>
+  </div>
+</section>
+
+<!-- ========== 8 FULL SETUP ========== -->
+<section id="setup">
+  <h2><span class="num">8</span> Full setup (install from zero)</h2>
+  <p>Follow these steps in order on a WordPress site (local or hosting).</p>
+
+  <div class="box">
+    <h4><span class="n">1</span> Upload the plugin</h4>
+    <ol>
+      <li>WordPress → <strong>Plugins → Add New → Upload Plugin</strong></li>
+      <li>Choose <code>movieflix-core-….zip</code> → Install → <strong>Activate</strong></li>
+      <li>Activation creates tables and pages (Login, My List, Live TV, etc.)</li>
+    </ol>
+  </div>
+  <div class="box">
+    <h4><span class="n">2</span> Upload the theme</h4>
+    <ol>
+      <li><strong>Appearance → Themes → Add New → Upload Theme</strong></li>
+      <li>Choose <code>movieflix-theme-….zip</code> → Install → <strong>Activate</strong></li>
+      <li>If plugin is off, you only see “please activate Core”</li>
+    </ol>
+  </div>
+  <div class="box">
+    <h4><span class="n">3</span> Permalinks (required)</h4>
+    <ol>
+      <li><strong>Settings → Permalinks</strong></li>
+      <li>Select <strong>Post name</strong></li>
+      <li>Click <strong>Save Changes</strong> once</li>
+    </ol>
+  </div>
+  <div class="box">
+    <h4><span class="n">4</span> Import demo data (testing only)</h4>
+    <ol>
+      <li>Open MovieFlix admin → demo / import</li>
+      <li>Click <strong>Import demo content</strong> and wait</li>
+      <li>This loads <strong>fake sample data for testing</strong> — not a licensed library</li>
+    </ol>
+  </div>
+  <div class="box">
+    <h4><span class="n">5</span> Settings check</h4>
+    <ol>
+      <li>Open MovieFlix → Settings</li>
+      <li>Optional later: Google Client ID &amp; Secret, profiles, kids mode, force login</li>
+    </ol>
+  </div>
+  <div class="box">
+    <h4><span class="n">6</span> Open the site</h4>
+    <ol>
+      <li>Visit the homepage — hero + rows of demo titles</li>
+      <li>Check phone: bottom nav + 2-column Movies/Live grids</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 9 TESTING ========== -->
+<section id="test">
+  <h2><span class="num">9</span> Testing: login &amp; full workflow</h2>
+  <p>After setup + demo import, run this on desktop and mobile.</p>
+
+  <div class="box">
+    <h4><span class="n">A</span> Home &amp; browse</h4>
+    <ul>
+      <li>Homepage shows hero and rows with posters</li>
+      <li>Movies / TV / Live grids load</li>
+      <li>On phone: <strong>2 cards per row</strong>, site bottom nav works</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h4><span class="n">B</span> Search</h4>
+    <ul>
+      <li>Type a title — suggestions with poster appear</li>
+      <li>Open a result → detail page works</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h4><span class="n">C</span> Register &amp; login workflow</h4>
+    <ol>
+      <li>Open <strong>Sign up</strong> — confirm <strong>Continue with Google</strong> is visible</li>
+      <li>Create account with email + password</li>
+      <li>Log out</li>
+      <li>Open <strong>Login</strong> — Google button must show here too</li>
+      <li>Log in again</li>
+      <li>Optional: Forgot password form loads</li>
+    </ol>
+    <p style="margin-top:8px"><strong>Note:</strong> Google button always shows. Real Google sign-in needs Client ID + Secret in Settings and Google Cloud Console.</p>
+  </div>
+  <div class="box">
+    <h4><span class="n">D</span> My List &amp; Continue Watching</h4>
+    <ol>
+      <li>While logged in, add a title to My List</li>
+      <li>Open My List page — title appears</li>
+      <li>Play a demo title (sample video starts)</li>
+      <li>Leave mid-way → check Continue Watching</li>
+    </ol>
+  </div>
+  <div class="box">
+    <h4><span class="n">E</span> Live TV &amp; notifications</h4>
+    <ul>
+      <li>Live page: channel grid + chips</li>
+      <li>Bell icon: panel not cut off; Enable notifications may ask browser permission</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h4><span class="n">F</span> Admin</h4>
+    <ul>
+      <li>Edit a movie — video / poster fields present</li>
+      <li>Analytics page loads without error</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ========== 10 GO LIVE ========== -->
+<section id="golive">
+  <h2><span class="num">10</span> After testing → go live</h2>
+  <ol>
+    <li>Remove demo content</li>
+    <li>Add your own movies / series with real video or HLS URLs</li>
+    <li>Configure Google OAuth if you want real Google login</li>
+    <li>Use <strong>HTTPS</strong> (needed for Google, push notifications, PWA install)</li>
+    <li>Optional: enable profiles, kids mode, membership</li>
+    <li>Test login + one full watch again on production</li>
+  </ol>
+</section>
+
+<!-- ========== 11 SUMMARY ========== -->
+<section id="summary">
+  <h2><span class="num">11</span> Quick summary</h2>
+  <div class="grid">
+    <div class="card">
+      <h4>Plugin</h4>
+      <p>Engine: data, users, APIs, admin, demo import, analytics.</p>
+    </div>
+    <div class="card">
+      <h4>Theme</h4>
+      <p>Skin: pages, player UI, mobile layout, bottom nav.</p>
+    </div>
+    <div class="card">
+      <h4>Demo data</h4>
+      <p>Fake content for testing only — remove before real users.</p>
+    </div>
+    <div class="card">
+      <h4>Setup order</h4>
+      <p>Plugin → Theme → Permalinks → Import demo → Test → Go live.</p>
+    </div>
+  </div>
+  <div class="note-ok note">
+    <strong>One line:</strong> Plugin stores everything and answers AJAX; Theme shows the Netflix-style website and mobile UI.
+  </div>
+</section>
+
+</main>
+
+<footer class="doc-foot">
+  <p><strong>MovieFlix Complete Documentation</strong></p>
+  <p>Plugin Core 1.5.0 · Theme 2.0.4 · Demo data for testing only</p>
+  <p>Custom plugin and theme by Ajay, designed with AI tools · <a href="https://github.com/ajay995182/movieflix" target="_blank" rel="noopener">GitHub</a></p>
+  <p>This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+</footer>
+
+<nav class="bottom-bar" aria-label="Documentation sections">
+  <div class="bottom-inner">
+    <a href="#overview"><span class="ico" aria-hidden="true">◎</span><span class="label">Overview</span></a>
+    <a href="#features"><span class="ico" aria-hidden="true">★</span><span class="label">Features</span></a>
+    <a href="#plugin"><span class="ico" aria-hidden="true">☰</span><span class="label">Files</span></a>
+    <a href="#setup"><span class="ico" aria-hidden="true">①</span><span class="label">Setup</span></a>
+    <a href="#test"><span class="ico" aria-hidden="true">✓</span><span class="label">Test</span></a>
+  </div>
+</nav>
+
+</body>
+</html>
