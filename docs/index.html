@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MovieFlix: a streaming site built on WordPress</title>
+<meta name="description" content="Project guide for MovieFlix, a custom WordPress plugin and theme that make a Netflix-style streaming website.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f3f4f8;--ink:#151826;--mute:#555b73;--red:#e5154f;--amber:#f5a524;--line:#d9dce6;--white:#fff;--r:14px;box-sizing:border-box}
+*,*:before,*:after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.6 "Instrument Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","Instrument Sans",sans-serif;line-height:1.05;margin:0;letter-spacing:-.02em}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+section{padding:84px 0}
+h2{font-size:clamp(32px,4.4vw,52px);font-weight:800;max-width:15ch}
+.lede{color:var(--mute);max-width:60ch;margin:16px 0 0}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;border:2px solid var(--ink);background:transparent;cursor:pointer;font-family:inherit;color:var(--ink)}
+.btn.red{background:var(--red);border-color:var(--red);color:#fff}
+.btn.dark{background:var(--ink);color:#fff}
+.btn:hover{transform:translateY(-1px)}
+.btn svg{width:18px;height:18px;fill:currentColor}
+/* nav */
+nav{position:sticky;top:0;z-index:20;background:rgba(243,244,248,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:22px;height:64px}
+.logo{font:800 22px "Bricolage Grotesque",sans-serif;text-decoration:none;margin-right:auto}
+.logo b{color:var(--red)}
+nav a.l{font-size:14.5px;font-weight:500;text-decoration:none;color:var(--mute)}
+nav a.l:hover{color:var(--ink)}
+nav .btn{padding:8px 16px;font-size:14px}
+@media(max-width:900px){nav a.l{display:none}}
+@media(max-width:520px){nav .btn.out{display:none}}
+/* hero */
+.hero{padding:64px 0 90px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center}
+.hero small{display:block;font-weight:600;color:var(--red);margin-bottom:18px}
+.hero h1{font-size:clamp(38px,4.8vw,64px);font-weight:800;overflow-wrap:break-word}
+.hero p{color:var(--mute);margin:22px 0 28px;max-width:46ch}
+.row{display:flex;flex-wrap:wrap;gap:12px}
+.facts{display:flex;flex-wrap:wrap;gap:8px 28px;margin:34px 0 0;padding:20px 0 0;border-top:2px solid var(--ink)}
+.facts div{font-size:14px;color:var(--mute)}
+.facts b{display:block;font:800 26px "Bricolage Grotesque",sans-serif;color:var(--ink)}
+.frame{background:var(--ink);border-radius:var(--r);padding:34px 0 0;position:relative;box-shadow:12px 12px 0 var(--red);overflow:hidden}
+.frame:before{content:"";position:absolute;left:14px;top:12px;width:10px;height:10px;border-radius:50%;background:#ff5f57;box-shadow:16px 0 #febc2e,32px 0 #28c840}
+.frame img{display:block;width:100%;height:auto}
+@media(max-width:860px){.hero .wrap{grid-template-columns:1fr}.frame{box-shadow:8px 8px 0 var(--red)}}
+/* features */
+.groups{margin-top:44px;border-top:2px solid var(--ink)}
+.g{display:grid;grid-template-columns:260px 1fr;gap:28px;padding:30px 0;border-bottom:1px solid var(--line)}
+.g h3{font-size:26px;font-weight:600}
+.g ul{margin:0;padding:0;list-style:none;columns:2;column-gap:36px}
+.g li{padding:0 0 12px 22px;position:relative;break-inside:avoid;font-size:16px}
+.g li:before{content:"";position:absolute;left:0;top:.6em;width:10px;height:3px;background:var(--red)}
+@media(max-width:820px){.g{grid-template-columns:1fr;gap:12px}.g ul{columns:1}}
+/* gallery */
+.dark{background:var(--ink);color:#f3f4f8}
+.dark .lede{color:#aab0c8}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:28px 0 16px;scrollbar-width:thin}
+.tabs button{flex:none;font:500 14px "Instrument Sans",sans-serif;color:#cfd3e4;background:transparent;border:1px solid #3a4060;border-radius:999px;padding:8px 16px;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--amber);border-color:var(--amber);color:var(--ink);font-weight:600}
+.stage{background:#0b0d17;border:1px solid #2b3150;border-radius:var(--r);overflow:hidden}
+.stage img{display:block;width:100%;height:auto}
+.cap{margin:14px 0 0;color:#aab0c8;font-size:15px;min-height:3em}
+/* architecture */
+.arch{display:grid;grid-template-columns:1fr 120px 1fr;margin-top:44px;align-items:stretch}
+.box{background:var(--white);border:2px solid var(--ink);border-radius:var(--r);padding:26px}
+.box h3{font-size:28px;font-weight:800}
+.box .v{font-size:13px;color:var(--mute);margin:4px 0 14px;font-weight:600}
+.box ul{margin:0;padding-left:18px;font-size:15.5px}
+.link{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;font-size:13px;font-weight:600;color:var(--mute);padding:0 6px}
+.link i{display:block;width:100%;height:3px;background:repeating-linear-gradient(90deg,var(--red) 0 8px,transparent 8px 14px);margin:8px 0}
+.tbls{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.tbls code,code{font:500 .88em ui-monospace,Menlo,Consolas,monospace;background:#e7e9f1;padding:2px 7px;border-radius:6px}
+.note{margin-top:26px;padding:18px 22px;border-left:5px solid var(--amber);background:#fff;border-radius:0 var(--r) var(--r) 0;font-size:15.5px}
+@media(max-width:820px){.arch{grid-template-columns:1fr}.link{padding:18px 0}.link i{width:3px;height:40px;background:repeating-linear-gradient(180deg,var(--red) 0 8px,transparent 8px 14px)}}
+/* flows */
+.flow{margin-top:44px}
+.flow h3{font-size:24px;font-weight:600;margin-bottom:18px}
+.steps{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:0;counter-reset:s}
+.steps div{padding:0 18px 0 0;position:relative;font-size:15px;color:var(--mute)}
+.steps b{display:block;color:var(--ink);font-size:16px;margin-top:14px}
+.steps div:before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--red);color:#fff;font-weight:700;font-size:14px;position:relative;z-index:1}
+.steps div:after{content:"";position:absolute;left:32px;right:0;top:15px;height:2px;background:var(--line)}
+.steps div:last-child:after{display:none}
+@media(max-width:820px){.steps{grid-auto-flow:row;gap:20px}.steps div:after{display:none}}
+/* files */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:44px;align-items:start}
+details{background:var(--white);border:1px solid var(--line);border-radius:12px;margin-bottom:10px}
+summary{cursor:pointer;padding:14px 18px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";color:var(--red);font-size:22px;line-height:1}
+details[open] summary:after{content:"\2212"}
+details dl{margin:0;padding:0 18px 14px}
+details dt{margin-top:10px}
+details dd{margin:2px 0 0;color:var(--mute);font-size:15px}
+.cols>div>h3{font-size:24px;margin-bottom:14px}
+@media(max-width:820px){.cols{grid-template-columns:1fr}}
+/* install */
+.inst{margin:44px 0 0;padding:0;list-style:none;counter-reset:i;max-width:760px}
+.inst li{counter-increment:i;display:grid;grid-template-columns:48px 1fr;gap:6px 14px;padding:20px 0;border-bottom:1px solid var(--line)}
+.inst li:before{content:counter(i);grid-row:span 2;font:800 34px "Bricolage Grotesque",sans-serif;color:var(--red);line-height:1}
+.inst b{font-size:18px}
+.inst span{color:var(--mute);font-size:15.5px}
+/* checklist */
+.prog{display:flex;align-items:center;gap:16px;margin:30px 0 8px;flex-wrap:wrap}
+.bar{flex:1;min-width:180px;height:10px;background:var(--line);border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--red);transition:width .25s}
+.chk{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;margin-top:20px}
+.chk fieldset{border:1px solid var(--line);border-radius:12px;background:#fff;margin:0;padding:14px 18px 8px}
+.chk legend{font-weight:700;padding:0 6px}
+.chk label{display:flex;gap:10px;padding:7px 0;font-size:15px;cursor:pointer;align-items:flex-start}
+.chk input{accent-color:var(--red);width:18px;height:18px;margin-top:3px;flex:none}
+.chk input:checked+span{color:var(--mute);text-decoration:line-through}
+/* demo + live */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:44px}
+.two h3{font-size:24px;margin-bottom:12px}
+.two ul,.two ol{margin:0;padding-left:20px}
+.two li{margin-bottom:8px;font-size:15.5px}
+@media(max-width:820px){.two{grid-template-columns:1fr}}
+.cta{background:var(--red);color:#fff;text-align:center}
+.cta h2{max-width:none;margin:0 auto}
+.cta p{max-width:52ch;margin:16px auto 28px;opacity:.92}
+.cta .row{justify-content:center}
+.cta .btn{border-color:#fff;color:#fff}
+.cta .btn.w{background:#fff;color:var(--red)}
+footer{padding:30px 0;font-size:14px;color:var(--mute)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between;align-items:center}
+footer p{margin:0;max-width:70ch}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="gh" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.05-.49.05-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 014 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol>
+<symbol id="pl" viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z"/></symbol></defs></svg>
+
+<nav><div class="wrap">
+<a class="logo" href="#top"><b>Movie</b>Flix</a>
+<a class="l" href="#features">Features</a><a class="l" href="#screens">Screens</a><a class="l" href="#build">Build</a><a class="l" href="#install">Install</a><a class="l" href="#test">Test</a>
+<a class="btn out" href="https://github.com/ajay995182/movieflix" target="_blank" rel="noopener"><svg><use href="#gh"/></svg>GitHub</a>
+<a class="btn red" href="https://movieflix.freehosting.dev/" target="_blank" rel="noopener"><svg><use href="#pl"/></svg>Live site</a>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+<div>
+<small>WordPress project 2, by Ajay</small>
+<h1>A Netflix-style streaming site, written from scratch</h1>
+<p>MovieFlix is a movie and TV website on WordPress. A custom plugin runs the data and a custom theme draws the screens. Both were designed with AI tools, and this guide walks through every feature.</p>
+<div class="row">
+<a class="btn red" href="https://movieflix.freehosting.dev/" target="_blank" rel="noopener"><svg><use href="#pl"/></svg>Open live site</a>
+<a class="btn dark" href="https://github.com/ajay995182/movieflix" target="_blank" rel="noopener"><svg><use href="#gh"/></svg>View on GitHub</a>
+</div>
+<div class="facts"><div><b>2</b>custom parts</div><div><b>5</b>custom tables</div><div><b>13</b>pages on activation</div><div><b>11k+</b>lines of code</div></div>
+</div>
+<div class="frame"><img src="shots/02-home-trending.jpg" alt="MovieFlix home page with genre chips and the Trending Now row"></div>
+</div></header>
+
+<section id="features"><div class="wrap">
+<h2>Everything the site can do</h2>
+<p class="lede">Checked against the plugin and theme code.</p>
+<div class="groups" id="groups"></div>
+</div></section>
+
+<section class="dark" id="screens"><div class="wrap">
+<h2>The site in use</h2>
+<p class="lede">Real screenshots from the running site. Pick a page.</p>
+<div class="tabs" id="tabs" role="tablist" aria-label="Screenshots"></div>
+<div class="stage"><img id="shot" src="shots/09-home-hero.jpg" alt=""></div>
+<p class="cap" id="cap"></p>
+</div></section>
+
+<section id="build"><div class="wrap">
+<h2>An engine and a skin</h2>
+<p class="lede">Both parts must be active. The plugin never draws the interface and the theme never stores data. They talk through PHP helpers, post meta and AJAX.</p>
+<div class="arch">
+<div class="box"><h3>MovieFlix theme</h3><div class="v">Version 2.0.4 &ndash; the look and the pages</div>
+<ul><li>Home, browse, detail and watch pages</li><li>Player screen, Live TV, login and register</li><li>Mobile bottom menu, search, notification panel</li><li>PWA install and service worker</li></ul></div>
+<div class="link">PHP helpers<i></i>AJAX<i></i>post meta</div>
+<div class="box"><h3>MovieFlix Core</h3><div class="v">Version 1.5.0 &ndash; the data and the rules</div>
+<ul><li>Movies, series, episodes, people, channels</li><li>Filters: genre, language, country, rating, quality, year</li><li>My List, progress, ratings, activity, Google login</li><li>Admin screens, import, upload and analytics</li></ul>
+<div class="tbls"><code>watch_history</code><code>watchlist</code><code>ratings</code><code>views</code><code>activity</code></div></div>
+</div>
+<div class="note"><b>Built by me, with AI tools.</b> The plugin and the theme are custom code, not third-party plugins or a downloaded theme. The only outside script is hls.js from jsDelivr, for HLS video. If the plugin is off, the theme shows a message asking you to activate MovieFlix Core.</div>
+
+<div class="flow"><h3>Add a title to My List</h3><div class="steps">
+<div><b>Tap +</b>app.js in the theme catches the click.</div>
+<div><b>AJAX request</b>The theme sends a toggle-list action with the movie ID.</div>
+<div><b>Plugin saves</b>MF_Ajax writes a row in the watchlist table.</div>
+<div><b>Button updates</b>It shows In My List with no page reload.</div></div></div>
+<div class="flow"><h3>Play a movie</h3><div class="steps">
+<div><b>Press Play</b>The link goes to /watch/title-slug/ through plugin routes.</div>
+<div><b>Watch page loads</b>page-watch.php reads video URL, subtitles and intro times.</div>
+<div><b>Player runs</b>player.js plays MP4 or HLS, with skip intro and next episode.</div>
+<div><b>Progress saved</b>The plugin stores the time in watch_history.</div></div></div>
+
+<div class="cols">
+<div><h3>Plugin: movieflix-core/</h3><div id="fp"></div></div>
+<div><h3>Theme: movieflix/</h3><div id="ft"></div></div>
+</div>
+</div></section>
+
+<section id="install" style="background:#fff"><div class="wrap">
+<h2>From empty WordPress to a working site</h2>
+<p class="lede">You need WordPress 6.0+ and PHP 7.4+. Do the steps in this order.</p>
+<ol class="inst">
+<li><b>Upload the plugin</b><span>Plugins, Add New, Upload Plugin, choose <code>movieflix-core-1.5.0.zip</code>, Install, Activate. Activation creates the tables and front-end pages.</span></li>
+<li><b>Upload the theme</b><span>Appearance, Themes, Add New, Upload Theme, choose <code>movieflix-theme-2.0.4.zip</code>, Install, Activate.</span></li>
+<li><b>Fix permalinks</b><span>Settings, Permalinks, select Post name, Save Changes. Required for the /watch/ links.</span></li>
+<li><b>Import demo content</b><span>Open MovieFlix in the admin menu and click Import demo content. This is test data only.</span></li>
+<li><b>Check the settings</b><span>MovieFlix, Settings. Later add a Google Client ID and Secret, and switch on profiles, Kids mode and force login.</span></li>
+<li><b>Open the site</b><span>Check the hero and rows. On a phone, check the bottom navigation and two-column grids.</span></li>
+</ol>
+</div></section>
+
+<section id="test"><div class="wrap">
+<h2>Login and full workflow checklist</h2>
+<p class="lede">Run it once on a laptop and once on a phone. Your ticks are saved in this browser.</p>
+<div class="prog"><div class="bar"><i id="pb"></i></div><b id="pt">0 of 0</b><button class="btn" id="rs" type="button">Reset</button></div>
+<div class="chk" id="chk"></div>
+<div class="note"><b>About Google login.</b> The button always shows. A real Google sign-in works only after you add a Client ID and Secret in MovieFlix Settings and set up Google Cloud Console.</div>
+<div class="two">
+<div><h3>Demo data, for testing only</h3><ul>
+<li>38 movies, 8 series, 30 people and 12 channels, using real Indian film titles so the layout looks like a real catalog.</li>
+<li>Posters come from TMDB. The plugin also ships 13 SVG placeholder posters as fallbacks.</li>
+<li>Every title plays the same open sample videos (Blender open movies and a public Mux HLS stream). No copyrighted film is included.</li>
+<li>Use Remove demo in admin before real use.</li></ul></div>
+<div><h3>Going live</h3><ol>
+<li>Remove the demo content.</li><li>Add titles with video you have the rights to.</li><li>Add your own artwork.</li><li>Set up Google OAuth for real login.</li><li>Switch to HTTPS (needed for Google login, notifications and PWA).</li><li>Test login and one full watch again.</li></ol></div>
+</div>
+</div></section>
+
+<section class="cta"><div class="wrap">
+<h2>See it running, then read the code</h2>
+<p>Create an account, add a title to My List and press play. Everything is open on GitHub.</p>
+<div class="row">
+<a class="btn w" href="https://movieflix.freehosting.dev/" target="_blank" rel="noopener"><svg><use href="#pl"/></svg>Open live site</a>
+<a class="btn" href="https://github.com/ajay995182/movieflix" target="_blank" rel="noopener"><svg><use href="#gh"/></svg>View on GitHub</a>
+</div></div></section>
+
+<footer><div class="wrap"><p>MovieFlix by Ajay, a student project. Custom plugin (Core 1.5.0) and theme (2.0.4), designed with AI tools. Demo data is for testing only. This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+<div class="row"><a class="btn" href="https://movieflix.freehosting.dev/" target="_blank" rel="noopener">Live site</a><a class="btn" href="https://github.com/ajay995182/movieflix" target="_blank" rel="noopener">GitHub</a></div></div></footer>
+
+<script>
+var G=[["Browse and find",["Home page with a hero banner and rows: Trending, Popular, New and recommendations","Movies, TV Shows and New & Popular pages with poster grids","Search with live suggestions showing poster, year and type badge","Genre pages, language chips and similar titles on every detail page"]],
+["Watch",["Full watch page for movies and episodes at /watch/title-slug/","Plays MP4 files and HLS streams (.m3u8)","Subtitle and audio-track pickers when tracks are set in admin","Skip intro button and a next-episode overlay","Progress saved automatically, feeding Continue Watching"]],
+["Accounts and profiles",["Register, log in, log out, forgot and reset password","Continue with Google on Login and Sign-up","My List that adds and removes titles without a reload","Star ratings and written reviews","Multiple profiles, a Kids profile, optional parental PIN and members-only titles"]],
+["Content and Live TV",["Movies, series with seasons and episodes, and people pages with filmography","Filters for genre, language, country, age rating, quality and year","Live TV channel grid with category chips and favourites","Channel watch page with its own live player"]],
+["Mobile and web app",["Bottom navigation: Home, Movies, TV, Live, Profile","Two posters per row on phones, sticky header, full-screen search","Install banner for the PWA and a service worker for an offline shell","Notification bell with mark-all-read and optional browser notifications"]],
+["Admin tools",["MovieFlix Settings: colours, force login, PWA, ads, Google, channels, profiles","Edit screens for movie, series, episode and channel","Chunked upload for large video files","Demo import and remove, plus CSV, TMDB and bulk-episode import","Activity log and an Analytics page of views and top titles"]]];
+var g=document.getElementById("groups");
+G.forEach(function(x){var d=document.createElement("div");d.className="g";d.innerHTML="<h3>"+x[0]+"</h3><ul>"+x[1].map(function(i){return"<li>"+i.replace(/&/g,"&amp;")+"</li>"}).join("")+"</ul>";g.appendChild(d)});
+
+var S=[["Welcome tour","01-welcome-tour","A four-step tour greets new visitors over the featured hero banner."],
+["Home","02-home-trending","Language and genre chips, then the Trending Now row with quality badges and quick actions."],
+["Top 10","03-top10","The Top 10 This Week row with large rank numbers."],
+["Movies","04-movies-filters","Filter by genre, year, language, country, rating, quality and content rating."],
+["Movie page","07-movie-detail","Detail page with rating stars, My List and share buttons for WhatsApp and Telegram."],
+["Reviews","08-reviews-more-like-this","Reviews and a More Like This row of similar titles."],
+["Profile","05-profile-overview","Account dashboard with My List, Continue Watching, history, ratings and settings."],
+["Activity","06-my-activity","A private activity log of logins and plays."],
+["Hero","09-home-hero","Featured hero banner with Play Now, More Info and My List."],
+["Features","10-features","Visitor landing page for logged-out users."],
+["Sign up","11-register","Create account with Continue with Google or email."]];
+var tb=document.getElementById("tabs"),sh=document.getElementById("shot"),cp=document.getElementById("cap");
+function pick(i){S.forEach(function(s,j){tb.children[j].setAttribute("aria-selected",j==i)});sh.src="shots/"+S[i][1]+".jpg";sh.alt=S[i][0]+" screenshot";cp.textContent=S[i][2]}
+S.forEach(function(s,i){var b=document.createElement("button");b.type="button";b.setAttribute("role","tab");b.textContent=s[0];b.onclick=function(){pick(i)};tb.appendChild(b)});pick(1);
+
+var P=[["Core","movieflix-core.php","Main file. Defines constants, loads every module."],["includes/","functions.php","Helpers: settings, poster URL, watch link, post meta."],["","class-mf-install.php","On activation: creates 5 tables and 13 pages."],["","class-mf-content.php","Registers content types and taxonomies."],["","class-mf-query.php","Home rows, similar titles, search suggestions."],["","class-mf-demo.php, demo-data.php","Demo importer, remover and title list."],["","class-mf-activity.php","Logs views, plays, logins and searches."],["","class-mf-google.php","Continue with Google (OAuth start and callback)."],["","class-mf-extras.php","Profiles, Kids mode, channels, membership, PIN."],["","class-mf-notify.php","Notification list for the bell."],["public/","class-mf-routes.php","Pretty URLs such as /watch/title-slug/."],["","class-mf-ajax.php","My List, rating, progress and play events."],["","class-mf-forms.php","Login, register, review and profile forms."],["admin/","class-mf-admin.php, class-mf-metaboxes.php","Dashboard, Settings and edit fields."],["","class-mf-upload.php, class-mf-import.php","Chunked uploader; CSV, TMDB and bulk import."],["","class-mf-activity-admin.php, class-mf-analytics-admin.php","Activity log and Analytics screens."]];
+var T=[["style.css","All the UI: desktop, mobile grids, bottom navigation."],["functions.php, header.php, footer.php","Setup, logo, menu, search, notifications, mobile nav."],["front-page.php","Home page: hero and rows."],["single-movie.php, single-series.php","Movie detail; series detail with episodes."],["single-person.php, single-channel.php","Actor or director page; live channel player."],["archive-*.php, taxonomy*.php","Movies and series grids; genre and filter archives."],["page-watch.php","The full video player page."],["page-channels.php, page-tv-shows.php, page-new-popular.php","Live TV, TV Shows and New & Popular."],["page-search.php, search.php","Search results."],["page-my-list.php, page-continue-watching.php","The two personal lists."],["page-profile.php, page-profiles.php","Account tabs and profile switching."],["page-login.php, page-register.php, page-*-password.php","Sign in, sign up and password recovery."],["template-parts/","browse, hero, single-title, rating, reviews."],["inc/","setup (menus, assets, PWA), template-tags, seo, needs-plugin."],["assets/js/","app.js, player.js, channel-player.js, sw.js."]];
+function fl(id,a,k){var h="";if(k){var cur="",open=0;a.forEach(function(r){if(r[0]){if(open)h+="</dl></details>";cur=r[0];h+="<details"+(cur=="Core"?" open":"")+"><summary>"+cur+"</summary><dl>";open=1}h+="<dt><code>"+r[1]+"</code></dt><dd>"+r[2]+"</dd>"});h+="</dl></details>"}else{h="<details open><summary>All theme files</summary><dl>"+a.map(function(r){return"<dt><code>"+r[0]+"</code></dt><dd>"+r[1]+"</dd>"}).join("")+"</dl></details>"}document.getElementById(id).innerHTML=h}
+fl("fp",P,1);fl("ft",T,0);
+
+var C=[["Home and browse",["Home shows the hero banner and rows with posters","Movies, TV Shows and Live grids load","New & Popular page opens","On a phone: two cards per row and bottom navigation works"]],
+["Search",["Typing shows suggestions with poster, year and badge","Opening a result shows the detail page","A genre page lists titles of that genre"]],
+["Register and login",["Sign up page shows Continue with Google","Create an account with email and password","Log out","Login page also shows Continue with Google","Log in again","Forgot password form loads"]],
+["My List and Continue Watching",["Add a title to My List while logged in","My List page shows the title","Remove it; the button changes with no reload","Play a demo title and the sample video starts","Leave halfway; title appears under Continue Watching"]],
+["Player",["Watch page opens at /watch/title-slug/","An MP4 title plays","The HLS demo stream plays","Subtitle picker appears on a title with a track","Skip intro and next-episode overlay appear on a set-up episode"]],
+["Ratings and profiles",["A star rating saves","A written review shows on the title page","A Kids profile can be created","Kids mode hides adult titles"]],
+["Live TV and notifications",["Live page shows the channel grid and chips","A channel opens its player page","Notification panel is not cut off on desktop or phone"]],
+["Admin",["Editing a movie shows video and poster fields","Settings page opens","Analytics page loads without error","Activity log lists your login and play","Remove demo works (do this last)"]]];
+var K="mf-guide-checks",st={};try{st=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
+var ch=document.getElementById("chk"),n=0;
+C.forEach(function(c,i){var f=document.createElement("fieldset");f.innerHTML="<legend>"+c[0]+"</legend>";c[1].forEach(function(t,j){var id=i+"-"+j,l=document.createElement("label");n++;l.innerHTML='<input type="checkbox"><span></span>';l.querySelector("span").textContent=t;var b=l.firstChild;b.checked=!!st[id];b.onchange=function(){st[id]=b.checked;try{localStorage.setItem(K,JSON.stringify(st))}catch(e){}upd()};f.appendChild(l)});ch.appendChild(f)});
+function upd(){var d=ch.querySelectorAll("input:checked").length;document.getElementById("pb").style.width=(d/n*100)+"%";document.getElementById("pt").textContent=d+" of "+n}
+document.getElementById("rs").onclick=function(){st={};try{localStorage.removeItem(K)}catch(e){}ch.querySelectorAll("input").forEach(function(b){b.checked=false});upd()};upd();
+</script>
+</body>
+</html>
